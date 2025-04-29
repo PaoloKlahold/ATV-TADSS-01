@@ -2,14 +2,15 @@ import java.util.Random;
 
 public class Client {
     private String name;
-    private int queueTime;
+    private int serveTime;
     private int arrivalTime;
+    private boolean hasBeenServed = false;
     private int awaitingTime = 0; 
 
     public Client(String name) {
         this.name = name;
         Random random = new Random();
-        this.queueTime = 30 + random.nextInt(91);
+        this.serveTime = 30 + random.nextInt(91);
         this.arrivalTime = 5 + random.nextInt(46);
     }
 
@@ -17,8 +18,8 @@ public class Client {
         return name;
     }
 
-    public int getQueueTime() {
-        return queueTime;
+    public int getServeTime() {
+        return serveTime;
     }
 
     public int getArrivalTime() {
@@ -33,11 +34,19 @@ public class Client {
         return awaitingTime;
     }
 
+    public void setHasBeenServed(boolean hasBeenServed) {
+        this.hasBeenServed = hasBeenServed;
+    }
+
+    public boolean getHasBeenServed() {
+        return this.hasBeenServed;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "Client{name='%s', queueTime=%d, arrivalTime=%d}",
-                name, queueTime, arrivalTime
+                "Client{name='%s', serveTime=%d, arrivalTime=%d}",
+                name, serveTime, arrivalTime
         );
     }
 }

@@ -6,7 +6,7 @@ public class Queue {
     private List<Client> clientsInQueue;
 
     public Queue() {
-        this.clientsInQueue = new ArrayList<>();
+        this.clientsInQueue = new ArrayList<Client>();
         this.timeLimitInQueue = 120;
     }
 
@@ -25,6 +25,10 @@ public class Queue {
     }
 
     public void addAwaitingTimeIntoClientsInQueue() {
+        if (this.clientsInQueue.isEmpty()) {
+            return;
+        }
+
         for (Client client : this.clientsInQueue) {
             client.addAwaitingTime();
 

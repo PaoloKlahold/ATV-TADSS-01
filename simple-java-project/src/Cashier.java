@@ -1,13 +1,16 @@
-import java.sql.Time;
-
 public class Cashier extends Thread {
+    public static int elevenAMtoOnePMinSeconds = 7200;
+    private String name;
     private Queue queue;
     private TimeWork timeWork;
+    private End end;
     private boolean isOpen;
 
-    public Cashier(Queue queue, TimeWork timeWork) {
+    public Cashier(String name, Queue queue, TimeWork timeWork, End end) {
+        this.name = name;
         this.queue = queue;
         this.timeWork = timeWork;
+        this.end = end;
     }
 
     @Override
@@ -24,20 +27,32 @@ public class Cashier extends Thread {
 
     public void stopWorking() {
         this.isOpen = false;
+        this.end.end();
+    }
+
+    public String getCashierName() {
+        return this.name;
     }
 
     private void work() {
-        if (!queue.isEmpty()) {
-            int time = timeWork.getActualTime();
-            Client client = queue.getFirstClient();
-            serveClient(client);
+        int time = timeWork.getActualTime();
 
+        if (!queue.isEmpty()) {
+            Client client = queue.getFirstClient();
+            serveClient(client, time);
+        } else {
+            if (time >= elevenAMtoOnePMinSeconds) {
+                stopWorking();
+            } else {
+                timeWork.setActualTime(time + 1);
+            }
         }
     }
 
-    private void serveClient(Client client) {
-        for (int i = 0; i < client.getQueueTime(); i++) {
-            
+    private void serveClient(Client client, int time) {
+        for (int i = 1; i <= client.getServeTime(); i++) {
+            timeWork.setActualTime(time + i);
         }
+        client.setHasBeenServed(true);
     }
 }

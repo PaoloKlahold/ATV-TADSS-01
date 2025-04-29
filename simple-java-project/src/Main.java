@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static int elevenAMtoOnePMinSeconds = 7200;
     public static final int NUMBER_OF_CLIENTS = 10; 
+    public static final int NUMBER_OF_CASHIERS = 4; 
 
     public static void main(String[] args) {
         List<Client> clients = new ArrayList<>();
@@ -12,14 +12,17 @@ public class Main {
             clients.add(new Client("Cliente" + i));
         }
 
-        System.out.println("Clientes criados:");
-        for (Client client : clients) {
-            System.out.println(client);
+        Queue queue = new Queue();
+        TimeWork timeWork = new TimeWork(queue, clients);
+        End end = new End(queue, timeWork, clients, NUMBER_OF_CASHIERS);
+
+        List<Cashier> cashiers = new ArrayList<>();
+        for (int i = 1; i <= NUMBER_OF_CASHIERS; i++) {
+            cashiers.add(new Cashier("Caixa" + i, queue, timeWork, end));
         }
 
-        Queue queue = new Queue();
-
-        for (int seconds = 0; seconds < elevenAMtoOnePMinSeconds; seconds++) {
+        for (Cashier cashier : cashiers) {
+            cashier.startWorking();
         }
     }
 }
