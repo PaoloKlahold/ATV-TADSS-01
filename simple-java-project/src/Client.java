@@ -2,28 +2,40 @@ import java.util.Random;
 
 public class Client {
     private String name;
-    private int serveTime;
-    private int arrivalTime;
-    private boolean hasBeenServed = false;
-    private int awaitingTime = 0; 
+    private int definedServeTime; // Tempo de atendimento pré definido
+    private int definedArrivalTime; // Tempo de chegada após o anterior pré definido
+    private boolean hasBeenServed;
+    private int awaitingTime; 
+    private int arrivalTime; // Tempo de chegada do cliente
 
     public Client(String name) {
         this.name = name;
         Random random = new Random();
-        this.serveTime = 30 + random.nextInt(91);
-        this.arrivalTime = 5 + random.nextInt(46);
+        this.definedServeTime = 30 + random.nextInt(91);
+        this.definedArrivalTime = 5 + random.nextInt(46);
+        this.hasBeenServed = false;
+        this.awaitingTime = 0;
+        this.arrivalTime = 0;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public int getServeTime() {
-        return serveTime;
+    public int getDefinedServeTime() {
+        return this.definedServeTime;
+    }
+
+    public int getDefinedArrivalTime() {
+        return this.definedArrivalTime;
+    }
+
+    public void setArrivalTime(int arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public int getArrivalTime() {
-        return arrivalTime;
+        return this.arrivalTime;
     }
 
     public void addAwaitingTime() {
@@ -31,7 +43,7 @@ public class Client {
     }
 
     public int getAwaitingTime() {
-        return awaitingTime;
+        return this.awaitingTime;
     }
 
     public void setHasBeenServed(boolean hasBeenServed) {
@@ -40,13 +52,5 @@ public class Client {
 
     public boolean getHasBeenServed() {
         return this.hasBeenServed;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Client{name='%s', serveTime=%d, arrivalTime=%d}",
-                name, serveTime, arrivalTime
-        );
     }
 }

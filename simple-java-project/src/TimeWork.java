@@ -14,11 +14,12 @@ public class TimeWork {
     public synchronized void setActualTime(int time) {
         if (time > this.actualTime) {
 
-            for (int i = 1; i <= (time -  this.actualTime); i++) {
+            for (int i = 1; i <= (time - this.actualTime); i++) {
                 this.queue.addAwaitingTimeIntoClientsInQueue();
 
                 for (Client client : this.clients) {
-                    if (client.getArrivalTime() == (time + i)) {
+                    if (client.getArrivalTime() == (this.actualTime + i)) {
+                        this.queue.addInQueueHistory(client.getName() + " chegou na fila no horário " + (this.actualTime + i) + ".");
                         this.queue.addClient(client);
                     }
                 }

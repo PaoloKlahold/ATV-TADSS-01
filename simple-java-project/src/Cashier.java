@@ -34,12 +34,15 @@ public class Cashier extends Thread {
         return this.name;
     }
 
-    private void work() {
+    private synchronized void work() {
         int time = timeWork.getActualTime();
 
         if (!queue.isEmpty()) {
             Client client = queue.getFirstClient();
-            serveClient(client, time);
+            if (client != null) {
+                queue.addInQueueHistory(client.getName() + " foi atendido no horário " + time + ".");
+                serveClient(client, time);
+            }
         } else {
             if (time >= elevenAMtoOnePMinSeconds) {
                 stopWorking();
@@ -50,9 +53,10 @@ public class Cashier extends Thread {
     }
 
     private void serveClient(Client client, int time) {
-        for (int i = 1; i <= client.getServeTime(); i++) {
+        for (int i = 1; i <= client.getDefinedServeTime(); i++) {
             timeWork.setActualTime(time + i);
         }
+
         client.setHasBeenServed(true);
     }
 }
